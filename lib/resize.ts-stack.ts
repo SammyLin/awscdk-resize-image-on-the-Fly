@@ -10,8 +10,6 @@ export class ResizeTsStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const bucket_name = 'MyStaticWebsite_test'
-
     // ===== Lambda
     const fn = new lambda.Function(this, 'MyFunction', {
       runtime: lambda.Runtime.NODEJS_8_10,
@@ -31,7 +29,7 @@ export class ResizeTsStack extends cdk.Stack {
     const backendURL = `${publishedGateway.restApiId}.execute-api.${this.region}.amazonaws.com`
 
     // S3
-    const websiteBucket = new s3.Bucket(this, bucket_name, {
+    const websiteBucket = new s3.Bucket(this, 'S3_Bucket', {
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html',
       websiteRoutingRules: [{
@@ -75,6 +73,5 @@ ${websiteBucket.bucketWebsiteUrl}/400x400/hello.jpg
     new cdk.CfnOutput(this, 'Hint', {
         value: hint
     })
-    new cdk.CfnOutput(this, 'WebsiteUrl', { value: websiteBucket.bucketWebsiteUrl });
   }
 }
